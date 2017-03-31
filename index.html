@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>canvas</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<style type="text/css">
+			*{
+				padding: 0;
+				margin: 0;
+			}
+			body{
+				overflow: hidden;
+			}
+			input{
+				float: left;
+				
+			}
+		</style>
+	</head>
+	<body>
+		<div>
+			<input type="color" onchange="colorChange()" id="color"/>
+			<input type="range" id="size" min="1" max="20" onchange="sizeChange()"/>
+			<input type="button" id="reset" value="重置" onclick="Reset()"/>
+		</div>
+		<canvas id="canvasBox" style="background-color: #eee;"></canvas>
+	</body>
+	<script type="text/javascript">
+		var sUserAgent = navigator.userAgent.toLowerCase();
+		var bIsIpad = sUserAgent.match(/ipad/i) == "ipad";
+		var bIsIphoneOs = sUserAgent.match(/iphone os/i) == "iphone os";
+		var bIsMidp = sUserAgent.match(/midp/i) == "midp";
+		var bIsUc7 = sUserAgent.match(/rv:1.2.3.4/i) == "rv:1.2.3.4";
+		var bIsUc = sUserAgent.match(/ucweb/i) == "ucweb";
+		var bIsAndroid = sUserAgent.match(/android/i) == "android";
+		var bIsCE = sUserAgent.match(/windows ce/i) == "windows ce";
+		var bIsWM = sUserAgent.match(/windows mobile/i) == "windows mobile";
+		if (bIsIpad || bIsIphoneOs || bIsMidp || bIsUc7 || bIsUc || bIsAndroid || bIsCE || bIsWM) {
+			canvasFun();
+		} else {
+			document.getElementsByTagName("body")[0].innerHTML = "暂不支持PC端，请用移动设备打开！"
+		}
+		
+		function canvasFun(){
+			//画布大小
+			var c = document.getElementById("canvasBox");
+			c.width=window.innerWidth;
+			c.height=window.innerHeight;
+			var ctx = c.getContext('2d'),
+			colorObj = "#000",
+			sizeObj = 10,
+			mousePositionL,
+			mousePositionT;
+			function colorChange(){
+				colorObj = document.getElementById("color").value;
+			}
+			function sizeChange(){
+				sizeObj = document.getElementById("size").value;
+			}
+			function Reset(){
+				ctx.clearRect(0,0,c.width,c.height)
+			}
+			c.addEventListener('touchstart',function(e){
+				var touchObj = e.touches[0];
+				ctx.fillStyle=colorObj;
+				ctx.beginPath();
+				ctx.arc(touchObj.clientX,touchObj.clientY-25,sizeObj,0,Math.PI*2,true);
+				ctx.closePath();
+				ctx.fill();
+			})
+			c.addEventListener('touchmove',function(e){
+				var touchObj = e.touches[0];
+				ctx.fillStyle=colorObj;
+				ctx.beginPath();
+				ctx.arc(touchObj.clientX,touchObj.clientY-25,sizeObj,0,Math.PI*2,true);
+				ctx.closePath();
+				ctx.fill();
+			})
+		}
+	</script>
+</html>
